@@ -1,0 +1,168 @@
+
+============================================================================
+ 4. MASK R-CNN + SWIN-T  (rows 1-5 of the paper table)
+============================================================================
+
+# ---- 1. Full-Precision 32/32 (reference row, ~15 min) ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/mask_rcnn_swin-t-p4-w7_fpn_ms-crop-3x_coco_20210906_131725-bacf6f7b.pth --data-root D:/COCO/coco2017 --eval-fp-only
+
+# ---- 2. AdaLog uniform 4/4 (baseline row) ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/mask_rcnn_swin-t-p4-w7_fpn_ms-crop-3x_coco_20210906_131725-bacf6f7b.pth --data-root D:/COCO/coco2017 --config ./configs/4bit_det.py --uniform --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 3. Ours MP4/MP4 (proposed method) ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/mask_rcnn_swin-t-p4-w7_fpn_ms-crop-3x_coco_20210906_131725-bacf6f7b.pth --data-root D:/COCO/coco2017 --config ./configs/4bit_det.py --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 4. AdaLog uniform 3/3 (baseline row) ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/mask_rcnn_swin-t-p4-w7_fpn_ms-crop-3x_coco_20210906_131725-bacf6f7b.pth --data-root D:/COCO/coco2017 --config ./configs/3bit_det.py --uniform --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 5. Ours MP3/MP3 (proposed method) ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/mask_rcnn_swin-t-p4-w7_fpn_ms-crop-3x_coco_20210906_131725-bacf6f7b.pth --data-root D:/COCO/coco2017 --config ./configs/3bit_det.py --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 6. Ablation: MP4/MP4 without the refinement round ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/mask_rcnn_swin-t-p4-w7_fpn_ms-crop-3x_coco_20210906_131725-bacf6f7b.pth --data-root D:/COCO/coco2017 --config ./configs/4bit_det.py --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 2 --chunk-elems 2000000 --seed 5 --no-refine
+
+# ---- 7. Ablation: MP3/MP3 without the refinement round ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/mask_rcnn_swin-t-p4-w7_fpn_ms-crop-3x_coco_20210906_131725-bacf6f7b.pth --data-root D:/COCO/coco2017 --config ./configs/3bit_det.py --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 2 --chunk-elems 2000000 --seed 5 --no-refine
+
+# ---- 8. Optional: uniform 6/6 (not in the paper table) ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/mask_rcnn_swin-t-p4-w7_fpn_ms-crop-3x_coco_20210906_131725-bacf6f7b.pth --data-root D:/COCO/coco2017 --config ./configs/6bit_det.py --uniform --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 9. Optional: Ours MP6/MP6 ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/mask_rcnn_swin-t-p4-w7_fpn_ms-crop-3x_coco_20210906_131725-bacf6f7b.pth --data-root D:/COCO/coco2017 --config ./configs/6bit_det.py --candidate-bits 5 6 7 --target-avg-bit 6.0 --calib-size 2 --chunk-elems 2000000 --seed 5
+
+============================================================================
+ 5. MASK R-CNN + SWIN-S  (rows 6-10 of the paper table)
+============================================================================
+ Identical to section 4 with --model mask_rcnn_swin_s_3x. Replace
+ <SWIN_S_CKPT> with the actual filename from `dir checkpoints\det`.
+
+# ---- 1. Full-Precision 32/32 ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/<SWIN_S_CKPT>.pth --data-root D:/COCO/coco2017 --eval-fp-only
+
+# ---- 2. AdaLog uniform 4/4 ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/<SWIN_S_CKPT>.pth --data-root D:/COCO/coco2017 --config ./configs/4bit_det.py --uniform --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 3. Ours MP4/MP4 ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/<SWIN_S_CKPT>.pth --data-root D:/COCO/coco2017 --config ./configs/4bit_det.py --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 4. AdaLog uniform 3/3 ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/<SWIN_S_CKPT>.pth --data-root D:/COCO/coco2017 --config ./configs/3bit_det.py --uniform --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 5. Ours MP3/MP3 ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/<SWIN_S_CKPT>.pth --data-root D:/COCO/coco2017 --config ./configs/3bit_det.py --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 2 --chunk-elems 2000000 --seed 5
+
+
+# ---- 6. Ablation: MP4/MP4 without refinement ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/<SWIN_S_CKPT>.pth --data-root D:/COCO/coco2017 --config ./configs/4bit_det.py --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 2 --chunk-elems 2000000 --seed 5 --no-refine
+
+# ---- 7. Ablation: MP3/MP3 without refinement ----
+python run_mixed_precision_det.py --model mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/<SWIN_S_CKPT>.pth --data-root D:/COCO/coco2017 --config ./configs/3bit_det.py --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 2 --chunk-elems 2000000 --seed 5 --no-refine
+
+
+
+
+============================================================================
+ 6. CASCADE MASK R-CNN  (the right half of the paper table)
+============================================================================
+ mmdet 3.x ships Swin configs for Mask R-CNN but NOT for Cascade Mask R-CNN.
+ Those checkpoints only exist in Microsoft's Swin-Transformer-Object-Detection
+ repo, in mmdet 2.x format, so they need a one-time conversion. The mmdet 3.x
+ model configs are provided here:
+
+   ./configs/det/cascade-mask-rcnn_swin-t-p4-w7_fpn_ms-crop-3x_coco.py
+   ./configs/det/cascade-mask-rcnn_swin-s-p4-w7_fpn_ms-crop-3x_coco.py
+
+ --- 6a. Download the mmdet 2.x checkpoints -------------------------------
+ From the Swin-Transformer-Object-Detection MODEL ZOO (github.com/
+ SwinTransformer/Swin-Transformer-Object-Detection), grab the 3x
+ Cascade Mask R-CNN rows:
+
+   cascade_mask_rcnn_swin_tiny_patch4_window7.pth     (published 50.4 / 43.7)
+   cascade_mask_rcnn_swin_small_patch4_window7.pth    (published 51.9 / 45.0)
+
+ Put both in ./checkpoints/det/.
+
+ --- 6b. Convert them to mmdet 3.x ----------------------------------------
+ The backbone needs more than renaming: mmdet's PatchMerging uses nn.Unfold,
+ which orders the four sub-patches differently from the original Swin's
+ slicing, so the reduction/norm weights must be permuted. The converter calls
+ mmdet's own swin_converter for that, then verifies the key sets against the
+ target config.
+
+python tools/convert_swin_det_ckpt.py --src ./checkpoints/det/cascade_mask_rcnn_swin_tiny_patch4_window7.pth --dst ./checkpoints/det/cascade_mask_rcnn_swin_t_3x_mmdet3.pth --config ./configs/det/cascade-mask-rcnn_swin-t-p4-w7_fpn_ms-crop-3x_coco.py
+
+python tools/convert_swin_det_ckpt.py --src ./checkpoints/det/cascade_mask_rcnn_swin_small_patch4_window7.pth --dst ./checkpoints/det/cascade_mask_rcnn_swin_s_3x_mmdet3.pth --config ./configs/det/cascade-mask-rcnn_swin-s-p4-w7_fpn_ms-crop-3x_coco.py
+
+ Expect "key sets match". If it reports missing keys or shape mismatches, the
+ conversion is wrong -- stop, do not run the experiments on it.
+
+ --- 6c. VERIFY the conversion before anything else -----------------------
+ The key-set check is necessary but not sufficient. The real proof is
+ reproducing the published FP32 number. Run this FIRST:
+
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_t_3x_mmdet3.pth --data-root D:/COCO/coco2017 --eval-fp-only
+
+ Must print approximately 50.4 box / 43.7 mask. If it prints something far
+ off (e.g. 5 or 30), the conversion or the config is wrong and every
+ quantized number built on it would be meaningless.
+
+ --- 6d. Cascade Mask R-CNN + Swin-T --------------------------------------
+
+# ---- 1. Full-Precision 32/32 (this is 6c above) ----
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_t_3x_mmdet3.pth --data-root D:/COCO/coco2017 --eval-fp-only
+
+# ---- 2. AdaLog uniform 4/4 ----
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_t_3x_mmdet3.pth --data-root D:/COCO/coco2017 --config ./configs/4bit_det.py --uniform --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 3. Ours MP4/MP4 ----
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_t_3x_mmdet3.pth --data-root D:/COCO/coco2017 --config ./configs/4bit_det.py --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 4. AdaLog uniform 3/3 ----
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_t_3x_mmdet3.pth --data-root D:/COCO/coco2017 --config ./configs/3bit_det.py --uniform --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 5. Ours MP3/MP3 ----
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_t_3x_mmdet3.pth --data-root D:/COCO/coco2017 --config ./configs/3bit_det.py --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 6. Ablation: MP4/MP4 without refinement ----
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_t_3x_mmdet3.pth --data-root D:/COCO/coco2017 --config ./configs/4bit_det.py --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 2 --chunk-elems 2000000 --seed 5 --no-refine
+
+ --- 6e. Cascade Mask R-CNN + Swin-S --------------------------------------
+ Swin-S has 24 blocks -> 100 components -> 300 Omega measurements, so each
+ mixed-precision run takes roughly twice as long as the Swin-T equivalent.
+
+# ---- 1. Full-Precision 32/32 (verify ~51.9 / 45.0 first) ----
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_s_3x_mmdet3.pth --data-root D:/COCO/coco2017 --eval-fp-only
+
+# ---- 2. AdaLog uniform 4/4 ----
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_s_3x_mmdet3.pth --data-root D:/COCO/coco2017 --config ./configs/4bit_det.py --uniform --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 3. Ours MP4/MP4 ----
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_s_3x_mmdet3.pth --data-root D:/COCO/coco2017 --config ./configs/4bit_det.py --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 4. AdaLog uniform 3/3 ----
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_s_3x_mmdet3.pth --data-root D:/COCO/coco2017 --config ./configs/3bit_det.py --uniform --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 5. Ours MP3/MP3 ----
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_s_3x_mmdet3.pth --data-root D:/COCO/coco2017 --config ./configs/3bit_det.py --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 2 --chunk-elems 2000000 --seed 5
+
+# ---- 6. Ablation: MP4/MP4 without refinement ----
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_s_3x_mmdet3.pth --data-root D:/COCO/coco2017 --config ./configs/4bit_det.py --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 2 --chunk-elems 2000000 --seed 5 --no-refine
+
+
+============================================================================================================================================================================================================================================================================================================
+==============================================================================================================================================================================================================================================================================================================
+
+#--------Swin - T (3 bit)-------
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_t_3x_mmdet3.pth --data-root D:/COCO/coco2017 --config ./configs/3bit_det.py --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 2 --chunk-elems 2000000 --seed 5 --no-refine
+
+#-------Swin - T (4 bit)--------
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_t_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_t_3x_mmdet3.pth --data-root D:/COCO/coco2017 --config ./configs/4bit_det.py --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 2 --chunk-elems 2000000 --seed 5 --no-refine
+
+
+==================================================================================================================================================================================================================================================================================================================
+
+#-------Swin - S(3 bit)---------
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_s_3x_mmdet3.pth --data-root D:/COCO/coco2017 --config ./configs/3bit_det.py --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 2 --chunk-elems 2000000 --seed 5 --no-refine
+
+#-------Swin - S(4 bit)---------
+python run_mixed_precision_det.py --model cascade_mask_rcnn_swin_s_3x --checkpoint ./checkpoints/det/cascade_mask_rcnn_swin_s_3x_mmdet3.pth --data-root D:/COCO/coco2017 --config ./configs/4bit_det.py --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 2 --chunk-elems 2000000 --seed 5 --no-refine

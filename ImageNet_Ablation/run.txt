@@ -1,0 +1,69 @@
+============================================================================
+ AdaLog Mixed-Precision PTQ -- run commands (ImageNet, Table 1 models)
+============================================================================
+ Bit-width mapping (matches the paper's columns):
+   W3/A3  ->  --config ./configs/3bit.py  --candidate-bits 2 3 4  --target-avg-bit 3.0
+   W4/A4  ->  --config ./configs/4bit.py  --candidate-bits 3 4 5  --target-avg-bit 4.0
+   W6/A6  ->  --config ./configs/6bit.py  --candidate-bits 5 6 7  --target-avg-bit 6.0
+
+ Notes:
+   * Runs are now deterministic (seeded RNGs + deterministic cuDNN/cuBLAS).
+     The same command on the same GPU gives the same accuracy every time.
+   * Refinement now uses a marginal, monotonic in-context Omega. To compare
+     against the no-refinement baseline, append:  --no-refine
+   * RTX 4070 (12 GB): the base models (deit_base / vit_base / swin_base) are
+     heavier. If validation OOMs, lower --val-batch-size (e.g. 100 or 64).
+   * --calib-size 32 is the standard AdaLog setting. Raise it (e.g. 64/128)
+     for an even more stable Omega estimate at the cost of more time.
+   * Change --dataset to your ImageNet root (must contain train/ and val/).
+============================================================================
+
+# ---- single-line commands (safe to paste into PowerShell or cmd) ----
+
+# ====================== DeiT-T (smallest / fastest) ======================
+python run_mixed_precision.py --model deit_tiny --config ./configs/3bit.py --dataset D:/imagenet_full --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 32 --device cuda --seed 5 --no-refine
+python run_mixed_precision.py --model deit_tiny --config ./configs/4bit.py --dataset D:/imagenet_full --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 32 --device cuda --seed 5
+python run_mixed_precision.py --model deit_tiny --config ./configs/6bit.py --dataset D:/imagenet_full --candidate-bits 5 6 7 --target-avg-bit 6.0 --calib-size 32 --device cuda --seed 5
+python run_mixed_precision.py --model deit_tiny --config ./configs/8bit.py --dataset D:/imagenet_full --candidate-bits 7 8 9 --target-avg-bit 8.0 --calib-size 32 --device cuda --seed 5 --no-refine
+
+# ============================== DeiT-S ===================================
+python run_mixed_precision.py --model deit_small --config ./configs/3bit.py --dataset D:/imagenet_full --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 32 --device cuda --seed 5
+python run_mixed_precision.py --model deit_small --config ./configs/4bit.py --dataset D:/imagenet_full --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 32 --device cuda --seed 5
+python run_mixed_precision.py --model deit_small --config ./configs/6bit.py --dataset D:/imagenet_full --candidate-bits 5 6 7 --target-avg-bit 6.0 --calib-size 32 --device cuda --seed 5
+python run_mixed_precision.py --model deit_small --config ./configs/8bit.py --dataset D:/imagenet_full --candidate-bits 7 8 9 --target-avg-bit 8.0 --calib-size 32 --device cuda --seed 5 --no-refine
+
+# ============================== DeiT-B ===================================
+python run_mixed_precision.py --model deit_base --config ./configs/3bit.py --dataset D:/imagenet_full --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 32 --device cuda --seed 5 --val-batch-size 100
+python run_mixed_precision.py --model deit_base --config ./configs/4bit.py --dataset D:/imagenet_full --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 32 --device cuda --seed 5 --val-batch-size 100
+python run_mixed_precision.py --model deit_base --config ./configs/6bit.py --dataset D:/imagenet_full --candidate-bits 5 6 7 --target-avg-bit 6.0 --calib-size 32 --device cuda --seed 5 --val-batch-size 100
+python run_mixed_precision.py --model deit_base --config ./configs/8bit.py --dataset D:/imagenet_full --candidate-bits 7 8 9 --target-avg-bit 8.0 --calib-size 32 --device cuda --seed 5 --no-refine
+
+
+# ============================== ViT-S ====================================
+python run_mixed_precision.py --model vit_small --config ./configs/3bit.py --dataset D:/imagenet_full --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 32 --device cuda --seed 5
+python run_mixed_precision.py --model vit_small --config ./configs/4bit.py --dataset D:/imagenet_full --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 32 --device cuda --seed 5
+python run_mixed_precision.py --model vit_small --config ./configs/6bit.py --dataset D:/imagenet_full --candidate-bits 5 6 7 --target-avg-bit 6.0 --calib-size 32 --device cuda --seed 5
+python run_mixed_precision.py --model vit_small --config ./configs/8bit.py --dataset D:/imagenet_full --candidate-bits 7 8 9 --target-avg-bit 8.0 --calib-size 32 --device cuda --seed 5 --no-refine
+
+# ============================== ViT-B ====================================
+python run_mixed_precision.py --model vit_base --config ./configs/3bit.py --dataset D:/imagenet_full --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 32 --device cuda --seed 5 --val-batch-size 100
+python run_mixed_precision.py --model vit_base --config ./configs/4bit.py --dataset D:/imagenet_full --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 32 --device cuda --seed 5 --val-batch-size 100
+python run_mixed_precision.py --model vit_base --config ./configs/6bit.py --dataset D:/imagenet_full --candidate-bits 5 6 7 --target-avg-bit 6.0 --calib-size 32 --device cuda --seed 5 --val-batch-size 100
+python run_mixed_precision.py --model vit_base --config ./configs/8bit.py --dataset D:/imagenet_full --candidate-bits 7 8 9 --target-avg-bit 8.0 --calib-size 32 --device cuda --seed 5 --no-refine
+
+
+
+
+# ============================== Swin-S ===================================
+python run_mixed_precision.py --model swin_small --config ./configs/3bit.py --dataset D:/imagenet_full --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 32 --device cuda --seed 5 --no-refine
+python run_mixed_precision.py --model swin_small --config ./configs/4bit.py --dataset D:/imagenet_full --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 32 --device cuda --seed 5 --no-refine
+python run_mixed_precision.py --model swin_small --config ./configs/6bit.py --dataset D:/imagenet_full --candidate-bits 5 6 7 --target-avg-bit 6.0 --calib-size 32 --device cuda --seed 5 --no-refine
+python run_mixed_precision.py --model swin_small --config ./configs/8bit.py --dataset D:/imagenet_full --candidate-bits 7 8 9 --target-avg-bit 8.0 --calib-size 32 --device cuda --seed 5 --no-refine
+
+
+# ============================== Swin-B ===================================
+python run_mixed_precision.py --model swin_base --config ./configs/3bit.py --dataset D:/imagenet_full --candidate-bits 2 3 4 --target-avg-bit 3.0 --calib-size 32 --device cuda --seed 5 --no-refine --val-batch-size 100
+python run_mixed_precision.py --model swin_base --config ./configs/4bit.py --dataset D:/imagenet_full --candidate-bits 3 4 5 --target-avg-bit 4.0 --calib-size 32 --device cuda --seed 5 --no-refine --val-batch-size 100
+python run_mixed_precision.py --model swin_base --config ./configs/6bit.py --dataset D:/imagenet_full --candidate-bits 5 6 7 --target-avg-bit 6.0 --calib-size 32 --device cuda --seed 5 --no-refine --val-batch-size 100
+python run_mixed_precision.py --model swin_base --config ./configs/8bit.py --dataset D:/imagenet_full --candidate-bits 7 8 9 --target-avg-bit 8.0 --calib-size 32 --device cuda --seed 5 --no-refine
+
